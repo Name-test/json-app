@@ -1,0 +1,16 @@
+.error-input {
+  border: 1px solid rgba(255, 0, 0, .2);
+  background-color: rgba(255, 0, 0, .1);
+}
+
+.copy {
+  background-color: transparent;
+  width: min-content;
+  border: none;
+  padding: 0;
+}
+
+.page {
+  width: 100vw;
+  overflow-x: hidden;
+}

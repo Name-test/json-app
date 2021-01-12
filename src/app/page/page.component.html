@@ -1,0 +1,163 @@
+<div class="page">
+  <div class="row">
+    <h4 class="mt-3" style="text-align: center">FUNDAMENTAL</h4>
+  </div>
+
+  <div class="container-fluid">
+
+    <form #newRow="ngForm">
+
+      <div class="row mt-3">
+
+        <div class="col-2">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="key">Key</span>
+            </div>
+            <input required pattern="^[a-zA-Z0-9_.]+$" #keyModel="ngModel" name="newKey" [(ngModel)]="key"
+                   [ngClass]="{'error-input': keyModel.invalid && addClick}"
+                   type="text" class="form-control" aria-label="Small" aria-describedby="newKey">
+          </div>
+        </div>
+
+        <div class="col-3">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-sm">Az</span>
+            </div>
+            <input required name="azValue" #azValueModel='ngModel' [(ngModel)]="azvalue"
+                   [ngClass]="{'error-input': azValueModel.invalid && addClick}"
+                   type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+          </div>
+        </div>
+
+        <div class="col-3">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing">Ru</span>
+            </div>
+            <input required name="ruValue" #ruValueModel='ngModel' [(ngModel)]="ruvalue" type="text" class="form-control"
+                   [ngClass]="{'error-input': ruValueModel.invalid && addClick}"
+                   aria-label="Small" aria-describedby="inputGroup-sizing">
+          </div>
+        </div>
+
+        <div class="col-3">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup">En</span>
+            </div>
+            <input required name="enValue" #enValueModel="ngModel" [(ngModel)]="envalue" type="text" class="form-control"
+                   [ngClass]="{'error-input': enValueModel.invalid && addClick}"
+                   aria-label="Small" aria-describedby="inputGroup">
+          </div>
+        </div>
+
+        <div class="col-1">
+          <button type="button" class="btn btn-primary" (click)="add(newRow)">Set</button>
+        </div>
+        <div class="col-3 offset-2">
+          <button type="button"
+                  class="btn btn-secondary"
+                  (click)="copyFirst()"
+          >Copy first to other</button>
+        </div>
+
+      </div>
+
+    </form>
+
+
+    <!--  HISTORY -->
+
+    <ng-container *ngFor="let item of keyRows[0] | keyvalue; let i = index">
+      <h5 class="mt-1">{{item.key}}</h5>
+      <ng-container *ngFor="let part of item.value | keyvalue; let a = index">
+        <div class="row pt-1">
+          <div class="col-2">
+            <div class="input-group input-group-sm mb-3 error">
+              <div class="input-group-prepend error">
+                <span class="input-group-text" id="historyKey">Key</span>
+              </div>
+              <input [disabled]="true" pattern="^[a-zA-Z0-9_.]+$" name="key"
+                     #key="ngModel" [(ngModel)]="item.key + '.' + part.key"
+                     type="text" class="form-control" aria-label="Small" aria-describedby="historyKey">
+            </div>
+          </div>
+
+          <div class="col-3">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Az</span>
+              </div>
+              <input [disabled]="checkDisabled(item.key, part.key)"
+                     name="valueRu"
+                     [(ngModel)]="keyRows[0][item.key][part.key]"
+                     #valueRu="ngModel"
+                     required
+                     [ngClass]="{'error-input' : valueRu.invalid}"
+                     type="text" class="form-control">
+            </div>
+          </div>
+
+
+          <div class="col-3">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="history-inputGroup-sizing">Ru</span>
+              </div>
+              <input name="valueRu"
+                     [(ngModel)]="keyRows[2][item?.key][part?.key]"
+                     [disabled]="checkDisabled(item?.key, part?.key)"
+                     #valueRu="ngModel"
+                     required
+                     [ngClass]="{'error-input' : valueRu.invalid}"
+                     type="text" class="form-control"
+                     aria-label="Small" aria-describedby="history-inputGroup-sizing">
+            </div>
+          </div>
+
+          <div class="col-3">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="history-inputGroup">En</span>
+              </div>
+              <input [disabled]="checkDisabled(item.key, part.key)" name="valueEn"
+                     [(ngModel)]="keyRows[1][item.key][part.key]"
+                     #valueEn="ngModel"
+                     required
+                     [ngClass]="{'error-input' : valueEn.invalid}"
+                     type="text" class="form-control"
+                     aria-label="Small" aria-describedby="history-inputGroup">
+            </div>
+          </div>
+
+          <div class="col-1" *ngIf="checkDisabled(item.key,part.key)">
+            <button type="button" class="btn btn-primary" (click)="edit(item.key,part.key)"
+            >Edit
+            </button>
+          </div>
+
+          <div class="col-1" *ngIf="!checkDisabled(item.key,part.key)">
+            <button type="button" class="btn btn-primary" (click)="setNew(
+          keyRows[0][item.key][part.key],
+          keyRows[1][item.key][part.key],
+          keyRows[2][item.key][part.key],
+          item.key,
+          part.key
+          )"
+            >Set new
+            </button>
+          </div>
+
+        </div>
+      </ng-container>
+    </ng-container>
+
+
+
+  </div>
+
+
+
+</div>
