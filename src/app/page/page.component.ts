@@ -32,7 +32,6 @@ export class PageComponent implements OnInit, AfterViewChecked {
     }
   };
   addClick = false;
-
   constructor(
     private firesServices: AngularFirestore,
     private dataBase: AngularFireDatabase,
@@ -48,12 +47,10 @@ export class PageComponent implements OnInit, AfterViewChecked {
     this.changeRef.detectChanges();
   }
 
-  add(form): boolean {
+  add(form): void {
     console.log(form.valid);
     console.log(form);
     this.addClick = true;
-
-    return false;
     const arr = this.key.split('.');
     this.parsingKey.first = arr[0];
     this.parsingKey.second = arr[1];
